@@ -1,0 +1,4 @@
+spring.application.name: recommendation-service
+server.port: 8001
+security.basic.enabled: false
+eureka.client.serviceUrl.defaultZone: ${eureka.url}/eureka
