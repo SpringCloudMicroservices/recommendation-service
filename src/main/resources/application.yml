@@ -4,6 +4,4 @@ security.basic.enabled: false
 eureka:
   client.serviceUrl.defaultZone: ${eureka.url}/eureka
   instance:
-      hostname: ${service.hostname:localhost}
-      nonSecurePort: 80
-      nonSecurePortEnabled: true
+      preferIpAddress: true
