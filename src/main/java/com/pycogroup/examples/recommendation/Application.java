@@ -16,8 +16,6 @@ import org.springframework.context.event.EventListener;
  * Created by tri.bui on 7/20/16.
  */
 @SpringBootApplication
-@Configuration
-@EnableAutoConfiguration
 @EnableDiscoveryClient
 @EnableEurekaClient
 @EnableFeignClients
