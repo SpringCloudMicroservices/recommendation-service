@@ -6,6 +6,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,6 +27,9 @@ public class RecommendationController {
     Set<Movie> adultRecommendations = Sets.newHashSet(new Movie("Shawshank Redemption"), new Movie("Spring"));
     Set<Movie> familyRecommendations = Sets.newHashSet(new Movie("Hook"), new Movie("The Sandlot"));
 
+    @Value("${adult.age}")
+    int adultAge;
+
     @RequestMapping("/{user}")
     @HystrixCommand(fallbackMethod = "recommendationFallback",
             ignoreExceptions = UserNotFoundException.class,
@@ -41,7 +45,7 @@ public class RecommendationController {
             throw new UserNotFoundException();
         }
 
-        return member.age < 17 ? kidRecommendations : adultRecommendations;
+        return member.age < adultAge ? kidRecommendations : adultRecommendations;
     }
 
     Set<Movie> recommendationFallback(String user) {

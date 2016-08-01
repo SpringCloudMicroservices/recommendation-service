@@ -2,6 +2,5 @@ spring.application.name: recommendation-service
 server.port: 8001
 security.basic.enabled: false
 eureka:
-  client.serviceUrl.defaultZone: ${eureka.url}/eureka
-  instance:
-      preferIpAddress: true
+  client.serviceUrl.defaultZone: ${eureka.url:http://localhost:8761}/eureka
+  instance.preferIpAddress: true
