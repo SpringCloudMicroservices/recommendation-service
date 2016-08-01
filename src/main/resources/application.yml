@@ -1,4 +1,9 @@
 spring.application.name: recommendation-service
 server.port: 8001
 security.basic.enabled: false
-eureka.client.serviceUrl.defaultZone: ${eureka.url}/eureka
+eureka:
+  client.serviceUrl.defaultZone: ${eureka.url}/eureka
+  instance:
+      hostname: ${service.hostname:localhost}
+      nonSecurePort: 80
+      nonSecurePortEnabled: true
