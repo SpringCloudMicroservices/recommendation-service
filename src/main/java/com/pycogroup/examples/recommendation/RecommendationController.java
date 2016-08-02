@@ -3,9 +3,10 @@ package com.pycogroup.examples.recommendation;
 import com.google.common.collect.Sets;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.pycogroup.examples.recommendation.exception.UserNotFoundException;
+import com.pycogroup.examples.recommendation.model.Movie;
+import com.pycogroup.examples.recommendation.model.User;
+import com.pycogroup.examples.recommendation.repository.MembershipRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class RecommendationController {
             throw new UserNotFoundException();
         }
 
-        return member.age < adultAge ? kidRecommendations : adultRecommendations;
+        return member.getAge() < adultAge ? kidRecommendations : adultRecommendations;
     }
 
     Set<Movie> recommendationFallback(String user) {
@@ -53,24 +54,3 @@ public class RecommendationController {
     }
 }
 
-@FeignClient("user-service")
-interface MembershipRepository {
-    @RequestMapping(method = RequestMethod.GET, value = "/api/users/{user}")
-    User findUser(@PathVariable("user") String user);
-}
-
-@Data
-@AllArgsConstructor
-class Movie {
-    String name;
-}
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class User {
-    String name;
-    int age;
-}
-
-class UserNotFoundException extends Exception {}
