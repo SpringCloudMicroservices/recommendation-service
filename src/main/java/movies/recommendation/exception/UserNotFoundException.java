@@ -1,4 +1,4 @@
-package com.pycogroup.examples.recommendation.exception;
+package movies.recommendation.exception;
 
 /**
  * Created by tri.bui on 8/2/16.

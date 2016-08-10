@@ -15,6 +15,7 @@ apply plugin: 'docker'
 
 dependencyManagement {
     imports {
+        mavenBom 'org.springframework.data:spring-data-releasetrain:Hopper-SR2'
         mavenBom 'org.springframework.cloud:spring-cloud-netflix:1.1.2.RELEASE'
     }
 }
@@ -52,7 +53,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
-    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.cloud:spring-cloud-starter-eureka'
     compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
@@ -60,6 +61,8 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-config'
 
     compile 'com.netflix.spring:spring-cloud-netflix-contrib:latest.release'
+    compile 'org.springframework.data:spring-data-commons:1.12.1.RELEASE' // must use 1.12.1 for neo4j
+    compile 'org.springframework.data:spring-data-neo4j:4.1.2.RELEASE'
 
     compile 'org.projectlombok:lombok:latest.release'
 }

@@ -1,15 +1,17 @@
-package com.pycogroup.examples.recommendation;
+package movies.recommendation;
 
-import com.google.common.collect.Sets;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import com.pycogroup.examples.recommendation.exception.UserNotFoundException;
-import com.pycogroup.examples.recommendation.model.Movie;
-import com.pycogroup.examples.recommendation.model.User;
-import com.pycogroup.examples.recommendation.repository.MembershipRepository;
+import movies.recommendation.exception.UserNotFoundException;
+import movies.recommendation.model.Member;
+import movies.recommendation.model.Movie;
+import movies.recommendation.repository.MembershipRepository;
+import movies.recommendation.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.inject.Inject;
@@ -24,9 +26,8 @@ public class RecommendationController {
     @Inject
     MembershipRepository membershipRepository;
 
-    Set<Movie> kidRecommendations = Sets.newHashSet(new Movie("Lion King"), new Movie("Frozen"));
-    Set<Movie> adultRecommendations = Sets.newHashSet(new Movie("Shawshank Redemption"), new Movie("Spring"));
-    Set<Movie> familyRecommendations = Sets.newHashSet(new Movie("Hook"), new Movie("The Sandlot"));
+    @Inject
+    MovieRepository movieRepository;
 
     @Value("${adult.age}")
     int adultAge;
@@ -41,16 +42,16 @@ public class RecommendationController {
     public @ResponseBody Set<Movie> getRecommendations(@PathVariable(value="user")String user)
             throws UserNotFoundException {
         RequestContextHolder.currentRequestAttributes();
-        User member = membershipRepository.findUser(user);
+        Member member = membershipRepository.findUser(user);
         if (member == null) {
             throw new UserNotFoundException();
         }
 
-        return member.getAge() < adultAge ? kidRecommendations : adultRecommendations;
+        return member.getAge() < adultAge ? movieRepository.findMoviesForKids() : movieRepository.findMoviesForAdults();
     }
 
     Set<Movie> recommendationFallback(String user) {
-        return familyRecommendations;
+        return movieRepository.findMoviesForFamily();
     }
 }
 
