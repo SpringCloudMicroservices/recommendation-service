@@ -4,3 +4,5 @@ security.basic.enabled: false
 eureka:
   client.serviceUrl.defaultZone: ${eureka.url:http://localhost:8761}/eureka
   instance.preferIpAddress: true
+
+jwt.secret.key: m0vi3s@pp
